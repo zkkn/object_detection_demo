@@ -24,7 +24,8 @@ basicConfig(
     level=INFO,
     format="%(asctime)s %(levelname)s %(name)s %(funcName)s(): %(message)s")
 
-is_async_mode = True
+#is_async_mode = True
+is_async_mode = False
 is_object_detection = True
 is_face_detection = False
 is_age_gender_detection = False

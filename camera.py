@@ -16,7 +16,15 @@ basicConfig(
     level=INFO,
     format="%(asctime)s %(levelname)s %(name)s %(funcName)s(): %(message)s")
 
-resize_prop = (640, 480)
+#ここで出力サイズが決まる
+#FIXME: 入力の動画サイズに自動でフレームサイズを確定させる
+#resize_prop = (640, 480)
+#holder
+#resize_prop = (1080, 1920)
+#pocopoco
+#resize_prop = (1280, 536)
+#resize_prop = (639, 1136)
+resize_prop = (1280, 720)
 
 
 class VideoCamera(object):

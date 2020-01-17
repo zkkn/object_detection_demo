@@ -172,6 +172,7 @@ Run app
 
 ```sh
 $ python3 app.py -i cam -d MYRIAD -d_em MYRIAD -d_ag MYRIAD -d_hp MYRIAD -d_lm MYRIAD
+$ python3 app.py -i /home/pi/Assets/video_right_trim_bottom_half.mp4 -d MYRIAD -d_em MYRIAD -d_ag MYRIAD -d_hp MYRIAD -d_lm MYRIAD
 ```
 
 access to the streaming url with your browser
