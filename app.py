@@ -68,7 +68,7 @@ def video_feed():
 def detection():
     global is_async_mode
     global is_object_detection
-    global is_face_detectiodetection
+    global is_face_detection
     global is_human_tracking
     global is_age_gender_detection
     global is_emotions_detection
