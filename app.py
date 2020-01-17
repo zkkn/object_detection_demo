@@ -28,6 +28,7 @@ basicConfig(
 is_async_mode = False
 is_object_detection = True
 is_face_detection = False
+is_human_tracking = False
 is_age_gender_detection = False
 is_emotions_detection = False
 is_head_pose_detection = False
@@ -38,7 +39,7 @@ flip_code = None  # filpcode: 0,x-axis 1,y-axis -1,both axis
 def gen(camera):
     while True:
         frame = camera.get_frame(is_async_mode, flip_code, is_object_detection,
-                                 is_face_detection, is_age_gender_detection,
+                                 is_face_detection, is_human_tracking, is_age_gender_detection,
                                  is_emotions_detection, is_head_pose_detection,
                                  is_facial_landmarks_detection)
         yield (b'--frame\r\n'
@@ -67,7 +68,8 @@ def video_feed():
 def detection():
     global is_async_mode
     global is_object_detection
-    global is_face_detection
+    global is_face_detectiodetection
+    global is_human_tracking
     global is_age_gender_detection
     global is_emotions_detection
     global is_head_pose_detection
@@ -82,16 +84,22 @@ def detection():
     if command == "object_detection":
         is_object_detection = True
         is_face_detection = False
+        is_human_tracking = False
     if command == "face_detection":
         is_face_detection = True
         is_object_detection = False
-    if command == "age_gender_detection" and not is_object_detection:
+        is_human_tracking = False
+    if command == "human_tracking":
+        is_human_tracking = True
+        is_face_detection = False
+        is_object_detection = False
+    if command == "age_gender_detection" and not is_object_detection and not is_human_tracking:
         is_age_gender_detection = not is_age_gender_detection
-    if command == "emotions_detection" and not is_object_detection:
+    if command == "emotions_detection" and not is_object_detection and not is_human_tracking:
         is_emotions_detection = not is_emotions_detection
-    if command == "head_pose_detection" and not is_object_detection:
+    if command == "head_pose_detection" and not is_object_detection and not is_human_tracking:
         is_head_pose_detection = not is_head_pose_detection
-    if command == "facial_landmarks_detection" and not is_object_detection:
+    if command == "facial_landmarks_detection" and not is_object_detection and not is_human_tracking:
         is_facial_landmarks_detection = not is_facial_landmarks_detection
 
     result = {
@@ -100,6 +108,7 @@ def detection():
         "flip_code": flip_code,
         "is_object_detection": is_object_detection,
         "is_face_detection": is_face_detection,
+        "is_human_tracking": is_human_tracking,
         "is_age_gender_detection": is_age_gender_detection,
         "is_emotions_detection": is_emotions_detection,
         "is_head_pose_detection": is_head_pose_detection,
@@ -108,7 +117,7 @@ def detection():
     logger.info(
         "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{} is_em_det:{} is_hp_det:{} is_lm_det:{}".
         format(command, is_async_mode, flip_code, is_object_detection,
-               is_face_detection, is_age_gender_detection,
+               is_face_detection, is_human_tracking, is_age_gender_detection,
                is_emotions_detection, is_head_pose_detection,
                is_facial_landmarks_detection))
     return jsonify(ResultSet=json.dumps(result))
@@ -135,15 +144,16 @@ def flip_frame():
         "flip_code": flip_code,
         "is_object_detection": is_object_detection,
         "is_face_detection": is_face_detection,
+        "is_human_tracking": is_human_tracking,
         "is_age_gender_detection": is_age_gender_detection,
         "is_emotions_detection": is_emotions_detection,
         "is_head_pose_detection": is_head_pose_detection,
         "is_facial_landmarks_detection": is_facial_landmarks_detection
     }
     logger.info(
-        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{} is_em_det:{} is_hp_det:{} is_lm_det:{}".
+        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_hm_tr:{} is_ag_det:{} is_em_det:{} is_hp_det:{} is_lm_det:{}".
         format(command, is_async_mode, flip_code, is_object_detection,
-               is_face_detection, is_age_gender_detection,
+               is_face_detection, is_human_tracking, is_age_gender_detection,
                is_emotions_detection, is_head_pose_detection,
                is_facial_landmarks_detection))
     return jsonify(ResultSet=json.dumps(result))

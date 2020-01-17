@@ -2,7 +2,7 @@ $(function () {
     var detection_cmd = ['async', 'sync', 'object_detection',
         'age_gender_detection', 'face_detection',
         'emotions_detection', 'head_pose_detection',
-        'facial_landmarks_detection'];
+        'facial_landmarks_detection', 'human_tracking'];
     var flip_cmd = ['flip'];
     var url = "";
     $('.btn').on('click', function () {
@@ -33,12 +33,13 @@ $(function () {
             var flip_code = JSON.parse(data.ResultSet).flip_code;
             var is_obj_det = JSON.parse(data.ResultSet).is_object_detection;
             var is_face_det = JSON.parse(data.ResultSet).is_face_detection;
+            var is_hm_tr = JSON.parse(data.ResultSet).is_human_tracking;
             var is_ag_det = JSON.parse(data.ResultSet).is_age_gender_detection;
             var is_em_det = JSON.parse(data.ResultSet).is_emotions_detection;
             var is_hp_det = JSON.parse(data.ResultSet).is_head_pose_detection;
             var is_lm_det = JSON.parse(data.ResultSet).is_facial_landmarks_detection;
             //console.log(sent_cmd);
-            $("#res").text("obj:" + is_obj_det + " face:" + is_face_det + " ag:" + is_ag_det + " em:" + is_em_det + " hp:" + is_hp_det + " lm:" + is_lm_det);
+            $("#res").text("obj:" + is_obj_det + " face:" + is_face_det + " tr:" + is_hm_tr + " ag:" + is_ag_det + " em:" + is_em_det + " hp:" + is_hp_det + " lm:" + is_lm_det);
             if (sent_cmd == 'async') {
                 $("#async").attr('class', 'btn btn-danger');
                 $("#sync").attr('class', 'btn btn-dark');
@@ -52,6 +53,9 @@ $(function () {
             }
             if (sent_cmd == 'face_detection') {
                 $("#is_face_detection").attr("disabled", false);
+            }
+            if (sent_cmd == 'human_tracking') {
+                $("#is_human_tracking").attr("disabled", false);
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {
             $("#res").text(textStatus + ":" + jqXHR.status + " " + errorThrown);

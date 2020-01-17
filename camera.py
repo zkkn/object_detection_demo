@@ -63,7 +63,7 @@ class VideoCamera(object):
             cv2.CAP_PROP_FRAME_HEIGHT), self.cap.get(cv2.CAP_PROP_FPS)
 
     def get_frame(self, is_async_mode, flip_code, is_object_detection,
-                  is_face_detection, is_age_gender_detection,
+                  is_face_detection, is_human_tracking, is_age_gender_detection,
                   is_emotions_detection, is_head_pose_detection,
                   is_facial_landmarks_detection):
 
@@ -87,6 +87,10 @@ class VideoCamera(object):
                 self.frame, next_frame, is_async_mode, is_age_gender_detection,
                 is_emotions_detection, is_head_pose_detection,
                 is_facial_landmarks_detection)
+
+        if is_human_tracking:
+            frame = self.detections.human_tracking(self.frame, next_frame,
+                                                     is_async_mode)
 
         # The first detected frame is None
         if frame is None:
