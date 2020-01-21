@@ -28,18 +28,13 @@ is_async_mode = True
 is_object_detection = True
 is_face_detection = False
 is_age_gender_detection = False
-is_emotions_detection = False
-is_head_pose_detection = False
-is_facial_landmarks_detection = False
 flip_code = None  # filpcode: 0,x-axis 1,y-axis -1,both axis
 
 
 def gen(camera):
     while True:
         frame = camera.get_frame(is_async_mode, flip_code, is_object_detection,
-                                 is_face_detection, is_age_gender_detection,
-                                 is_emotions_detection, is_head_pose_detection,
-                                 is_facial_landmarks_detection)
+                                 is_face_detection, is_age_gender_detection)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
@@ -68,9 +63,6 @@ def detection():
     global is_object_detection
     global is_face_detection
     global is_age_gender_detection
-    global is_emotions_detection
-    global is_head_pose_detection
-    global is_facial_landmarks_detection
 
     command = request.json['command']
     if command == "async":
@@ -86,12 +78,6 @@ def detection():
         is_object_detection = False
     if command == "age_gender_detection" and not is_object_detection:
         is_age_gender_detection = not is_age_gender_detection
-    if command == "emotions_detection" and not is_object_detection:
-        is_emotions_detection = not is_emotions_detection
-    if command == "head_pose_detection" and not is_object_detection:
-        is_head_pose_detection = not is_head_pose_detection
-    if command == "facial_landmarks_detection" and not is_object_detection:
-        is_facial_landmarks_detection = not is_facial_landmarks_detection
 
     result = {
         "command": "is_async_mode",
@@ -100,16 +86,11 @@ def detection():
         "is_object_detection": is_object_detection,
         "is_face_detection": is_face_detection,
         "is_age_gender_detection": is_age_gender_detection,
-        "is_emotions_detection": is_emotions_detection,
-        "is_head_pose_detection": is_head_pose_detection,
-        "is_facial_landmarks_detection": is_facial_landmarks_detection
     }
     logger.info(
-        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{} is_em_det:{} is_hp_det:{} is_lm_det:{}".
+        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{} ".
         format(command, is_async_mode, flip_code, is_object_detection,
-               is_face_detection, is_age_gender_detection,
-               is_emotions_detection, is_head_pose_detection,
-               is_facial_landmarks_detection))
+               is_face_detection, is_age_gender_detection))
     return jsonify(ResultSet=json.dumps(result))
 
 
@@ -134,17 +115,12 @@ def flip_frame():
         "flip_code": flip_code,
         "is_object_detection": is_object_detection,
         "is_face_detection": is_face_detection,
-        "is_age_gender_detection": is_age_gender_detection,
-        "is_emotions_detection": is_emotions_detection,
-        "is_head_pose_detection": is_head_pose_detection,
-        "is_facial_landmarks_detection": is_facial_landmarks_detection
+        "is_age_gender_detection": is_age_gender_detection
     }
     logger.info(
-        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{} is_em_det:{} is_hp_det:{} is_lm_det:{}".
+        "command:{} is_async:{} flip_code:{} is_obj_det:{} is_face_det:{} is_ag_det:{}".
         format(command, is_async_mode, flip_code, is_object_detection,
-               is_face_detection, is_age_gender_detection,
-               is_emotions_detection, is_head_pose_detection,
-               is_facial_landmarks_detection))
+               is_face_detection, is_age_gender_detection))
     return jsonify(ResultSet=json.dumps(result))
 
 
@@ -153,12 +129,10 @@ if __name__ == '__main__':
     # arg parse
     args = interactive_detection.build_argparser().parse_args()
     devices = [
-        args.device, args.device, args.device_age_gender, args.device_emotions,
-        args.device_head_pose, args.device_facial_landmarks
+        args.device, args.device, args.device_age_gender
     ]
     models = [
-        args.model_ssd, args.model_face, args.model_age_gender,
-        args.model_emotions, args.model_head_pose, args.model_facial_landmarks
+        args.model_ssd, args.model_face, args.model_age_gender
     ]
     if "CPU" in devices and args.cpu_extension is None:
         print(
